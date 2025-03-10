@@ -43,8 +43,6 @@ int my_unsetenv(char *name, char **env)
     char **new_env = NULL;
     int env_len = count_env_vars(env);
 
-    if (!name)
-        return 84;
     return check_name(name);
     new_env = malloc(sizeof(char *) * env_len);
     if (new_env == NULL)

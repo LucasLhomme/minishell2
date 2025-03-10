@@ -41,6 +41,8 @@ int my_setenv(char *name, char *value, char **env)
 {
     int exit_check_var = check_var(name);
 
+    if (!name)
+        return 84;
     if (exit_check_var != 0)
         return exit_check_var;
     if (value == NULL)

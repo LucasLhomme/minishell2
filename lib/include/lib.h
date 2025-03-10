@@ -6,60 +6,55 @@
 */
 
 #include <stdio.h>
-#include <stdarg.h>
-#include <stdlib.h>
 #include <string.h>
-#include <dirent.h>
-#include <time.h>
-#include <unistd.h>
+#include <stdlib.h>
 
-#ifndef MY_H
-    #define MY_H
-void flag_c(va_list list);
-void flag_d(va_list list);
-void flag_i(va_list list);
-void flag_o(va_list list);
-void flag_percent(va_list list);
-void flag_s(va_list list);
-void flag_x(va_list list);
-void flag_x2(va_list list);
+
+#ifndef LIB_H
+    #define LIB_H
+int my_isneg(int nb);
+int my_put_nbr(int nb);
+void my_swap(int *a, int *b);
+int my_putstr(char const *str);
+int my_strlen(char const *str);
+int my_getnbr(char const *str);
+void my_sort_int_array(int *tab, int size);
 int my_compute_power_rec(int nb, int power);
 int my_compute_square_root(int nb);
-int my_getnbr(const char *str);
-int my_isneg(int nb);int my_printf(const char *format, ...);
-int my_put_nbr(int nb);
-void my_putchar(char c);
-void my_putstr(char const *str);
-char *my_revstr(char *str);
-int my_str_isnum(char const *str);
-char **my_str_to_word_array(const char *str);
-char *my_strcat(char *dest, char const *src);
-int my_strcmp(char *const str1, char *const str2);
+int my_is_prime(int nb);
 char *my_strcpy(char *dest, char const *src);
-char *my_strdup(char const *src);
-int my_strlen(char const *str);
-char *my_strncat(char *dest, const char *src, size_t n);
+char *my_strstr(char *str, char const *to_find);
 int my_strncmp(char const *s1, char const *s2, size_t n);
-char *my_strncpy(char *dest, char const *src, int n);
+char *my_revstr(char *str);
+void my_putchar(char c);
+int my_print_comb2(void);
+void print_comb(int nb1, int nb2);
+int my_getnbr(char const *str);
+int my_evil_str(char *str);
+int my_print_comb(void);
+int sort_params(int argc, char *argv[]);
+char *my_strdup(char const *src);
+char *my_revstr(char *str);
 void my_swap(int *a, int *b);
-int bubble_sort(char **tab);
-int my_strnmajcmp(char *str1, char *str2, int n);
-void my_show_word_in_array(char **tab);
-char *my_getenv(char **env, char *value);
-char *extract_str(char const *str, char separator);
-char *extract_str_advanced(char *str, char separator1, char separator2);
-char *my_strchr(const char *str, char c);
-char *my_strtok(char *str, const char *delim);
-int my_strmajcmp(char *str1, char *str2);
-char **my_str_to_word_array_advanced(char *str, char *extra_chars);
-int my_str_tolower(char *str);
-void my_free_word_array(char **tab);
-int my_atoi(const char *str);
-int isalphanum(char c);
-int my_isdigit(char c);
+char *my_strstr(char *str, char const *to_find);
+char **my_str_to_word_array(char const *str);
 char *my_strndup(const char *str, size_t n);
-int isnonalphanum(char c);
+int my_printf(const char *format, ...);
+void flag_o(va_list list);
+void flag_d(va_list list);
+void flag_s(va_list list);
+void flag_i(va_list list);
+void flag_c(va_list list);
+void flag_percent(va_list list);
+void flag_x2(va_list list);
+void flag_x(va_list list);
+void blank(va_list list);
+int my_strcmp(char const *s1, char const *s2);
+int flag_detector(const char *format, int i, va_list list);
+int isalphanum(char c);
+char *my_strcat(char *str, const char *new_str);
+int my_isalpha(char c);
 int my_isnum(char c);
+char *my_uppercase(char *str);
 int nonalphanum(char c);
-
 #endif /*lib.h*/

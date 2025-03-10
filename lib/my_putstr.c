@@ -1,14 +1,19 @@
 /*
 ** EPITECH PROJECT, 2024
-** my_putstr.c
+** putstr
 ** File description:
-** putchar a string of char
+** putstr
 */
 
 #include "lib.h"
-#include <unistd.h>
 
-void my_putstr(char const *str)
+int my_putstr(char const *str)
 {
-    write(1, str, my_strlen(str));
+    int i = 0;
+
+    while (str[i] != '\0') {
+        my_putchar(str[i]);
+        i++;
+    }
+    return 0;
 }

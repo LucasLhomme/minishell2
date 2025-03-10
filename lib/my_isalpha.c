@@ -1,14 +1,14 @@
 /*
 ** EPITECH PROJECT, 2025
-** lib
+** B-PSU-200-LIL-2-1-minishell1-lucas.lhomme
 ** File description:
-** isalpha
+** my_isalpha
 */
 
 int my_isalpha(char c)
 {
-    if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
-        return 0;
-    else
-        return 84;
+    if ((c >= 'a' && c <= 'z') ||
+        (c >= 'A' && c <= 'Z'))
+        return 1;
+    return 0;
 }

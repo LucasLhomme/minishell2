@@ -35,7 +35,7 @@ TESTS=
 [803-END]
 
 [804]
-NAME="T | Minishell 2"
+NAME="Multiple command | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -43,7 +43,7 @@ TESTS=
 [804-END]
 
 [805]
-NAME="Minishell 2"
+NAME="Multiple command with arguments | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -51,7 +51,7 @@ TESTS=
 [805-END]
 
 [806]
-NAME="Minishell 2"
+NAME="Multiple command with grep | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -59,7 +59,7 @@ TESTS=
 [806-END]
 
 [807]
-NAME="Minishell 2"
+NAME="Multiple command with grep arguments | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -67,7 +67,7 @@ TESTS=
 [807-END]
 
 [808]
-NAME="Minishell 2"
+NAME="test redirection | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -76,7 +76,7 @@ TESTS=
 [808-END]
 
 [808]
-NAME="Minishell 2"
+NAME="Test multiple redirection | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -88,7 +88,7 @@ TESTS=
 [808-END]
 
 [809]
-NAME="Minishell 2"
+NAME="Void redirection | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -96,7 +96,7 @@ TESTS=
 [809-END]
 
 [810]
-NAME="Minishell 2"
+NAME="ls pipe | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -104,7 +104,7 @@ TESTS=
 [810-END]
 
 [811]
-NAME="Minishell 2"
+NAME="Test redirection with grep | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -132,7 +132,7 @@ TESTS=
 [813-END]
 
 [814]
-NAME="Minishell 2"
+NAME="Pipe and cd test | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -141,7 +141,7 @@ TESTS=
 [814-END]
 
 [815]
-NAME="Minishell 2"
+NAME="Check COLORTERM environment variable | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -149,7 +149,7 @@ TESTS=
 [815-END]
 
 [816]
-NAME="Minishell 2"
+NAME="Multiple ls commands | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -158,7 +158,7 @@ TESTS=
 [816-END]
 
 [817]
-NAME="Minishell 2"
+NAME="Exit command with pipe | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -166,7 +166,7 @@ TESTS=
 [817-END]
 
 [818]
-NAME="Minishell 2"
+NAME="Check environment variables with grep | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -174,17 +174,16 @@ TESTS=
 [818-END]
 
 [819]
-NAME="Minishell 2"
+NAME="Test redirection with echo and grep | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-  echo "echo bonjour ou hello enculer > coucou"
-  echo "grep hello < coucou"
-  echo "cat < coucou"
+  echo "echo bonjour ou hello > coucou"
+  echo "grep hello"
 [819-END]
 
 [820]
-NAME="Minishell 2"
+NAME="Test redirection with multiple commands | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -194,7 +193,7 @@ TESTS=
 [820-END]
 
 [821]
-NAME="Minishell 2"
+NAME="Check environment variables with grep | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -218,7 +217,7 @@ TESTS=
 [823-END]
 
 [824]
-NAME="Minishell 2"
+NAME="Find and grep test | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -226,7 +225,7 @@ TESTS=
 [824-END]
 
 [825]
-NAME="Minishell 2"
+NAME="Test who command with grep | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -234,7 +233,7 @@ TESTS=
 [825-END]
 
 [826]
-NAME="Minishell 2"
+NAME="Check top memory consuming processes | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -242,7 +241,7 @@ echo "ps aux --sort=-%mem | head"
 [826-END]
 
 [827]
-NAME="Minishell 2"
+NAME="Check established connections | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -250,7 +249,7 @@ echo "netstat -atun | grep ESTABLISHED"
 [827-END]
 
 [828]
-NAME="Minishell 2"
+NAME="Disk usage and sort | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -258,7 +257,7 @@ echo "du -h . | sort -hr | head"
 [828-END]
 
 [829]
-NAME="Minishell 2"
+NAME="List log and etc directories | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -266,7 +265,7 @@ echo "ls /var/log ; ls /etc"
 [829-END]
 
 [830]
-NAME="Minishell 2"
+NAME="Invalid redirection | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -274,7 +273,7 @@ echo "cat <"
 [830-END]
 
 [831]
-NAME="Minishell 2"
+NAME="Redirection from non-existent file | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
@@ -282,7 +281,7 @@ echo "< coucou"
 [831-END]
 
 [832]
-NAME="many | Minishell 2"
+NAME="many grep| Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=

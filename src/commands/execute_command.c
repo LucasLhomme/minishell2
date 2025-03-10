@@ -12,7 +12,7 @@ char *cleaning_buffer(char *buffer)
     char *path = buffer;
 
     if (path == NULL)
-        return (char *)cleaning_buffer;
+        return NULL;
     for (int i = 0; path[i] != '\0'; i++) {
         if (path[i] == '\n')
             path[i] = '\0';
@@ -61,10 +61,6 @@ int searching_bin(char *buffer, char **env)
 int hand_command(char *buffer, char **env)
 {
     cleaning_buffer(buffer);
-    for (int i = 0; buffer[i] != '\0'; i++)
-        if ((my_strncmp(buffer, " ", i) == 0) ||
-        my_strncmp(buffer, "\t", i) == 0)
-            return 0;
     if (my_strncmp(buffer, "cd", 2) == 0)
         return my_cd(buffer, env);
     if (my_strncmp(buffer, "setenv", 6) == 0 ||

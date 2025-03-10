@@ -16,12 +16,12 @@ NC=\033[0m # No Color
 NAME = mysh
 CFLAGS = -g -Wall -Wextra -W -Iinclude -Ilib/include -fdiagnostics-color=always
 SRC =	./src/main.c\
-./src/execute_command.c\
-./src/shell.c\
-./src/command_cd.c\
-./src/command_env.c\
-./src/setenv.c\
-./src/unsetenv.c\
+./src/shell/shell.c\
+./src/commands/execute_command.c\
+./src/commands/cd/command_cd.c\
+./src/commands/env/command_env.c\
+./src/commands/env/setenv.c\
+./src/commands/env/unsetenv.c\
 
 OBJ = $(SRC:.c=.o)
 LIBMY = libmy.a

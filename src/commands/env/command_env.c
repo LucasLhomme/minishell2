@@ -16,6 +16,8 @@ int print_env(char **env)
 
 int check_var(char *name)
 {
+    if (!name)
+        return 84;
     for (int i = 0; name[i] != '\0'; i++) {
         if (name[i] == '\0' || !my_isalpha(name[0])) {
             my_printf

@@ -23,6 +23,19 @@ const flag_t flags[] = {
     {'\0', NULL},
 };
 
+int flag_detector(const char *format, int i, va_list list)
+{
+    if (format[i] == ' ') {
+        my_putchar(' ');
+        return flag_detector(format, i + 1, list);
+    }
+    for (int c = 0; flags[c].flag != '\0'; c++) {
+        if (flags[c].flag == format[i])
+            flags[c].flag_identifier(list);
+    }
+    return i;
+}
+
 int my_printf(const char *format, ...)
 {
     int i = 0;
@@ -40,15 +53,3 @@ int my_printf(const char *format, ...)
     return 0;
 }
 
-int flag_detector(const char *format, int i, va_list list)
-{
-    if (format[i] == ' ') {
-        my_putchar(' ');
-        return flag_detector(format, i + 1, list);
-    }
-    for (int c = 0; flags[c].flag != '\0'; c++) {
-        if (flags[c].flag == format[i])
-            flags[c].flag_identifier(list);
-    }
-    return i;
-}

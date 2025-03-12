@@ -7,6 +7,18 @@
 #include "my.h"
 #include "lib.h"
 
+int process_input(char *buffer, char **env, int *exit_status) {
+    if (my_strcmp(buffer, " ") == 0 || my_strcmp(buffer, "\t") == 0 || !buffer)
+        return 0;
+    if (my_strncmp(buffer, "exit", 4) == 0)
+        return 1;
+    if (my_strcmp(buffer, "\n") != 0) {
+        cleaning_buffer(buffer);
+        *exit_status = hand_command(buffer, env);
+    }
+    return 0;
+}
+
 int loop_terminal(char **env)
 {
     size_t len = 0;
@@ -22,11 +34,8 @@ int loop_terminal(char **env)
             my_printf("exit\n");
             break;
         }
-        cleaning_buffer(buffer);
-        if (my_strcmp(buffer, "exit") == 0)
+        if (process_input(buffer, env, &exit_status) == 1)
             break;
-        if (my_strcmp(buffer, "\n") != 0)
-            exit_status = hand_command(buffer, env);
     }
     return exit_status;
 }
@@ -39,9 +48,10 @@ int loop_tty(char **env)
     int exit_status = 0;
 
     while (1) {
-    read = getline(&buffer, &len, stdin);
+        read = getline(&buffer, &len, stdin);
         if (read == -1) {
             free(buffer);
+            my_printf("exit\n");
             break;
         }
         if (my_strcmp(buffer, "exit") == 0)

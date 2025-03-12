@@ -7,6 +7,15 @@
 #include "my.h"
 #include "lib.h"
 
+int isalphanum_with_blanck(char *buffer)
+{
+    for (int i = 0; buffer[i] != '\0'; i++) {
+        if (my_strcmp(buffer, " ") == 0 || my_strcmp(buffer, "\t") == 0 || isalphanum(buffer[i]) == 0)
+            return 1;
+    }
+    return 0;
+}
+
 char *cleaning_buffer(char *buffer)
 {
     char *path = buffer;
@@ -38,10 +47,12 @@ int execute_bin(char *path, char **argv, char **env)
 
 int searching_bin(char *buffer, char **env)
 {
-    char **argv = my_str_to_word_array(buffer);
-    char *path = malloc(my_strlen("/bin/") + my_strlen(argv[0]) + 1);
+    char **argv = NULL;
+    char *path = NULL;
 
-    if (!argv[0] || path == NULL || buffer == NULL)
+    argv = my_str_to_word_array(buffer);
+    path = malloc(my_strlen("/bin/") + my_strlen(argv[0]) + 1);
+    if (!argv[0] || path == NULL)
         return 1;
     my_strcpy(path, "/bin/");
     my_strcat(path, argv[0]);
@@ -67,6 +78,12 @@ int hand_command(char *buffer, char **env)
     my_strncmp(buffer, "unsetenv", 8) == 0 ||
     my_strncmp(buffer, "env", 3) == 0)
         return my_env(buffer, env);
-    else
-        return searching_bin(buffer, env);
+    else {
+        int i = 0;
+        while (buffer[i] == ' ' || buffer[i] == '\t')
+            i++;
+        if (buffer[i] != '\0')
+            return searching_bin(buffer, env);
+    }
+    return 0;
 }

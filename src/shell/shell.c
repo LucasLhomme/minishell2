@@ -7,7 +7,8 @@
 #include "my.h"
 #include "lib.h"
 
-int process_input(char *buffer, char **env, int *exit_status) {
+int process_input(char *buffer, char **env, int *exit_status)
+{
     if (my_strcmp(buffer, " ") == 0 || my_strcmp(buffer, "\t") == 0 || !buffer)
         return 0;
     if (my_strncmp(buffer, "exit", 4) == 0)

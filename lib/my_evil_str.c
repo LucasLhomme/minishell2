@@ -9,7 +9,7 @@
 
 int my_evil_str(char *str)
 {
-    int lenght = strlen(str);
+    int lenght = my_strlen(str);
     int middle = lenght / 2;
     char rev_str;
 

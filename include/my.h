@@ -9,6 +9,13 @@
 #include <sys/wait.h>
 #include <stdarg.h>
 
+typedef int (*command_func_t)(char *, char **);
+
+typedef struct handle_command_s {
+    char *command;
+    command_func_t func;
+} handle_command_t;
+
 #ifndef MY_H_
     #define MY_H_
 char *cleaning_buffer(char *buffer);

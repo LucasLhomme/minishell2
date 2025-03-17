@@ -7,22 +7,25 @@
 #include "lib.h"
 #include "my.h"
 
+const handle_command_t commands[] = {
+    {"cd", my_cd},
+    {"env", my_env},
+    {"setenv", my_env},
+    {"unsetenv", my_env},
+    {NULL, NULL}
+};
+
 int hand_command(char *buffer, char **env)
 {
-    int i = 0;
-
     cleaning_buffer(buffer);
-    if (my_strncmp(buffer, "cd", 2) == 0)
-        return my_cd(buffer, env);
-    if (my_strncmp(buffer, "setenv", 6) == 0 ||
-    my_strncmp(buffer, "unsetenv", 8) == 0 ||
-    my_strncmp(buffer, "env", 3) == 0)
-        return my_env(buffer, env);
-    else {
-        while (buffer[i] == ' ' || buffer[i] == '\t')
-            i++;
-        if (buffer[i] != '\0')
-            return searching_bin(buffer, env);
+    for (int i = 0; commands[i].command != NULL; i++) {
+        if (my_strncmp(buffer, commands[i].command, my_strlen(commands[i].command)) == 0)
+            return commands[i].func(buffer, env);
     }
+    int i = 0;
+    while (buffer[i] == ' ' || buffer[i] == '\t')
+        i++;
+    if (buffer[i] != '\0')
+        return searching_bin(buffer, env);
     return 0;
 }

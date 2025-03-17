@@ -63,7 +63,7 @@ int my_env(char *buffer, char **env)
     if (my_strncmp(buffer, "env", 3) == 0)
         return print_env(env);
     if (my_strncmp(buffer, "setenv", 6) == 0) {
-        if (!argv[1] || !argv[2])
+        if (!argv[1] && !argv[2])
             print_env(env);
         if (argv[2] == NULL)
             return my_setenv(argv[1], NULL, env);

@@ -16,10 +16,12 @@ NC=\033[0m # No Color
 
 # Variables
 NAME = mysh
-CFLAGS = -g -Wall -Wextra -W -Iinclude -Ilib/include -fdiagnostics-color=always
+CFLAGS = -Wall -Wextra -W -Iinclude -Ilib/include -fdiagnostics-color=always
 SRC =	./src/main.c\
 		./src/shell/shell.c\
 		./src/commands/execute_command.c\
+		./src/commands/hand_command.c\
+		./src/commands/searching_bin.c\
 		./src/commands/cd/command_cd.c\
 		./src/commands/env/command_env.c\
 		./src/commands/env/setenv.c\
@@ -38,45 +40,44 @@ all: $(LIBMY) $(NAME)
 		WARNINGS=$$(grep -c "warning:" $(ERRORS_FILE)); \
 		rm -f $(ERRORS_FILE); \
 		if [ $$ERRORS -eq 0 ] && [ $$WARNINGS -eq 0 ]; then \
-			echo "$(GREEN)Build successful!$(NC)"; \
 			echo "$(ORANGE)"; \
-			echo "                                     @@@@@@@@@@@@  @@@@@@@@@@@@"; \
-			echo "                                   @@@@@@@@@@@@@@  @@@@@@@@@@@@@@"; \
-			echo "                                 @@@@@@@@@@@@@@@    @@@@@@@@@@@@@@@"; \
-			echo "                               @@@@@@@@@@@@@@@        @@@@@@@@@@@@@@@"; \
-			echo "                              @@@@@@@@@@@@@@            @@@@@@@@@@@@@@"; \
-			echo "                             @@@@@@@@@@@@@                @@@@@@@@@@@@@"; \
-			echo "                      @@     @@@@@@@@@@                      @@@@@@@@@@     @@"; \
-			echo "                      @@     @@@@@@@@@     @@@@@@@@@@@@@@     @@@@@@@@@     @@"; \
-			echo "                      @@@     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ @@@@@@@@@     @@@"; \
-			echo "                      @@@@     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@     @@@@"; \
-			echo "                       @@@@@    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@    @@@@@"; \
-			echo "                         @@@@@@@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ @@@@@@@@"; \
-			echo "                           @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"; \
-			echo "                     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"; \
-			echo "                    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"; \
-			echo "                  @@@@   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@   @@@"; \
-			echo "                  @@  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  @@"; \
-			echo "                  @  @@@@@      @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@      @@@@@  @"; \
-			echo "                    @@@        @@@@@@@@@@@@@     @@     @@@@@@@@@@@@@        @@@"; \
-			echo "                    @@        @@@@@                              @@@@@        @@"; \
-			echo "                    @        @@@@@@                              @@@@@@        @"; \
-			echo "                             @@@@@@@@@                        @@@@@@@@@"; \
-			echo "                              @@@@@@@@                        @@@@@@@@"; \
-			echo "                               @@@@@@@@                      @@@@@@@@"; \
-			echo "                                  @@@@                        @@@@"; \
+			echo "                       @@@@@@@@  @@@@@@@@"; \
+			echo "                     @@@@@@@@@@  @@@@@@@@@@"; \
+			echo "                   @@@@@@@@@@@    @@@@@@@@@@@"; \
+			echo "                 @@@@@@@@@@@        @@@@@@@@@@@"; \
+			echo "                @@@@@@@@@@            @@@@@@@@@@"; \
+			echo "               @@@@@@@@@                @@@@@@@@@"; \
+			echo "        @@     @@@@@@                      @@@@@@     @@"; \
+			echo "        @@     @@@@@     @@@@@@@@@@@@@@     @@@@@     @@"; \
+			echo "        @@@     @@@@@@@@@@@@@@@@@@@@@@@@@@ @@@@@     @@@"; \
+			echo "        @@@@     @@@@@@@@@@  @@@@@@  @@@@@@@@@@     @@@@"; \
+			echo "         @@@@@    @@@@@@@@@  @@@@@@  @@@@@@@@@    @@@@@"; \
+			echo "           @@@@@@ @@@@@@@@@@@@@@@@@@@@@@@@@@ @@@@@@"; \
+			echo "             @@@@@@@@@@@  @@@@@@@@@@@@  @@@@@@@"; \
+			echo "       @@@@@@@@@@@@@@@@@@             @@@@@@@@@@@@"; \
+			echo "      @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"; \
+			echo "    @@@@   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@   @@@"; \
+			echo "    @@  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  @@"; \
+			echo "    @  @@@@@   @@@@@@@@@@@@@@@@@@@@@@@@@@@   @@@@@  @"; \
+			echo "      @@@     @@@@@@@@@@@            @@@@@@@@@@@     @@@"; \
+			echo "      @@     @@@@@                      @@@@@     @@"; \
+			echo "      @     @@@@@@                      @@@@@@     @"; \
 			echo "$(NC)"; \
+			echo "$(GREEN)Build successful!$(NC)"; \
 		elif [ $$ERRORS -eq 0 ]; then \
-			echo "$(ORANGE)Build successful but with $(MAGENTA)$$WARNINGS warnings!$(NC)"; \
+			echo "$(BLUE)Build successful but:"; \
+			echo "$(MAGENTA)$$WARNINGS warnings!$(NC)"; \
 		else \
-			echo "$(RED)Build Failed!!!!$(NC): $(MAGENTA)Warnings: $$WARNINGS$(NC) $(RED)Errors: $$ERRORS$(NC)"; \
+			echo "$(RED)Build Failed!!!!$(NC)"; \
+			echo "$(MAGENTA)Warnings: $$WARNINGS$(NC)"; \
+			echo "$(RED)Errors: $$ERRORS$(NC)"; \
 		fi; \
 	else \
 		echo "$(GREEN)Build successful!$(NC)"; \
 	fi
 
-# Compilation de l'exécutable principal
-$(NAME): $(OBJ)
+# Compilation of the main executable
+$(NAME): $(OBJ) $(LIBMY)
 	@echo "$(YELLOW)Building $@...$(NC)"
 	@OUTPUT=$$(gcc $(CFLAGS) -o $@ $^ $(LIBMY) 2>&1); \
 	echo "$$OUTPUT" >> $(ERRORS_FILE); \
@@ -86,7 +87,7 @@ $(NAME): $(OBJ)
 		echo "$$OUTPUT"; \
 	fi;
 
-# Compilation des fichiers objets
+# Compilation of object files
 %.o: %.c
 	@echo "$(YELLOW)Compiling $<...$(NC)"
 	@OUTPUT=$$($(CC) $(CFLAGS) -c $< -o $@ 2>&1); \
@@ -97,31 +98,31 @@ $(NAME): $(OBJ)
 		echo "$$OUTPUT"; \
 	fi;
 
-# Compilation de la bibliothèque
+# Compilation of the library
 $(LIBMY):
 	@echo "$(BLUE)Building library...$(NC)"
 	@$(MAKE) --no-print-directory -C lib all
 
-# Nettoyage des fichiers objets et temporaires
+# Cleaning object and temporary files
 clean:
 	@echo "$(RED)Cleaning up...$(NC)"
 	@$(MAKE) --no-print-directory -C lib clean
 	@rm -f $(OBJ)
 	@rm -f $(ERRORS_FILE)
 
-# Nettoyage complet
+# Clean all
 fclean: clean
 	@rm -f $(NAME)
 	@rm -f $(LIBMY)
 
-# Rebuild tout
+# Rebuild all
 re: fclean all
 
-# Mode debug
+# Debug mode
 debug: CFLAGS += -g
 debug: $(NAME)
 
-# Rebuild en mode debug
+# Rebuild on debug mode
 redebug: fclean debug
 
 # Phony targets

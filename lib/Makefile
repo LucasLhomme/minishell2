@@ -7,7 +7,7 @@
 
 NAME = libmy.a
 
-CFLAGS += -Wall -Werror -Wextra -W -Iinclude
+CFLAGS += -Wall -Werror -Wextra -W -Iinclude -pthread
 
 
 LIB =	./check_strisnum.c\

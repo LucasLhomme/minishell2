@@ -7,8 +7,17 @@
 #include "my.h"
 #include "lib.h"
 
+int *verify_input(char *buffer, int exit_status)
+{
+    (void)exit_status;
+    if (my_strcmp(buffer, "|") == 0)
+        printf("pipe detected\n");
+    return 0;
+}
+
 int process_input(char *buffer, char **env, int *exit_status)
 {
+    verify_input(buffer, *exit_status);
     if (my_strcmp(buffer, " ") == 0 || my_strcmp(buffer, "\t") == 0 || !buffer)
         return 0;
     if (my_strncmp(buffer, "exit", 4) == 0)

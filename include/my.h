@@ -23,6 +23,7 @@ int new_value_env(char *name, char **env);
 int over_value_env(char *name, char *value, char **env);
 int my_unsetenv(char *name, char **env);
 int my_isalpha(char c);
+int execute_bin(char *path, char **argv, char **env);
 
 
 #endif /* MY_H_ */

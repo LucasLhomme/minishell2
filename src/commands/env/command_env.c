@@ -19,9 +19,8 @@ int check_var(char *name)
     if (!name)
         return 84;
     for (int i = 0; name[i] != '\0'; i++) {
-        if (name[i] == '\0' || !my_isalpha(name[0])) {
-            my_printf
-            ("setenv: Variable name must begin with a letter.\n");
+        if (!name || name[i] == '\0' || !my_isalpha(name[0])) {
+            my_printf("setenv: Variable name must begin with a letter.\n");
             return 1;
         }
         if (nonalphanum(name[i]) != 0) {
@@ -30,9 +29,8 @@ int check_var(char *name)
             return 1;
         }
         if ((!my_isalpha(name[i]) && !my_isnum(name[i]))) {
-            my_printf("setenv:");
-            my_printf
-            (" Variable name must contain only alphanumeric characters.\n");
+            my_printf("setenv: Variable name must ");
+            my_printf("contain only alphanumeric characters.\n");
             return 1;
         }
     }
@@ -65,6 +63,8 @@ int my_env(char *buffer, char **env)
     if (my_strncmp(buffer, "env", 3) == 0)
         return print_env(env);
     if (my_strncmp(buffer, "setenv", 6) == 0) {
+        if (!argv[1] || !argv[2])
+            print_env(env);
         if (argv[2] == NULL)
             return my_setenv(argv[1], NULL, env);
         if (argv[2] != NULL)

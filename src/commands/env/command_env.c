@@ -37,18 +37,25 @@ int check_var(char *name)
     return 0;
 }
 
-int my_setenv(char *name, char *value, char **env)
+int my_setenv(char *buffer, char **env)
 {
+    char **argv = my_str_to_word_array(buffer);
+    char *name = argv[1];
+    char *value = argv[2];
     int exit_check_var = check_var(name);
 
-    if (!name)
-        return 84;
+    if (!argv[1])
+    print_env(env);
+    if (argv[1] && argv[2] && argv[3]) {
+        my_printf("setenv: Too many arguments.\n");
+        return 1;
+    }
     if (exit_check_var != 0)
         return exit_check_var;
     if (value == NULL)
         return new_value_env(name, env);
     if (name != NULL || value != NULL)
-        return over_value_env(name, value, env);
+    return over_value_env(name, value, env);
     return 0;
 }
 
@@ -62,13 +69,5 @@ int my_env(char *buffer, char **env)
         return my_unsetenv(argv[1], env);
     if (my_strncmp(buffer, "env", 3) == 0)
         return print_env(env);
-    if (my_strncmp(buffer, "setenv", 6) == 0) {
-        if (!argv[1] && !argv[2])
-            print_env(env);
-        if (argv[2] == NULL)
-            return my_setenv(argv[1], NULL, env);
-        if (argv[2] != NULL)
-            return my_setenv(argv[1], argv[2], env);
-    }
     return 0;
 }

@@ -10,7 +10,7 @@
 const handle_command_t commands[] = {
     {"cd", my_cd},
     {"env", my_env},
-    {"setenv", my_env},
+    {"setenv", my_setenv},
     {"unsetenv", my_env},
     {NULL, NULL}
 };

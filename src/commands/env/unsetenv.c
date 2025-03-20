@@ -8,6 +8,17 @@
 #include "lib.h"
 #include "my.h"
 
+int verify_buffer(char *path, char **current)
+{
+    if (!path || my_strcmp(path, "") == 0) {
+        my_printf("unsetenv: Too few arguments.");
+        free(*current);
+        *current = NULL;
+        return 1;
+    }
+    return 0;
+}
+
 int check_name(char *name)
 {
     if (!name) {
@@ -43,10 +54,6 @@ int my_unsetenv(char *name, char **env)
     char **new_env = NULL;
     int env_len = count_env_vars(env);
 
-    if (!name) {
-        my_printf("unsetenv: Too few arguments.\n");
-        return 1;
-    }
     return check_name(name);
     new_env = malloc(sizeof(char *) * env_len);
     if (new_env == NULL)

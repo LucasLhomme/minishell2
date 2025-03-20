@@ -8,17 +8,6 @@
 #include "lib.h"
 #include <errno.h>
 
-int verify_buffer(char *path, char **current)
-{
-    if (!path || my_strcmp(path, "") == 0) {
-        my_printf("unsetenv: Too few arguments.");
-        free(*current);
-        *current = NULL;
-        return 1;
-    }
-    return 0;
-}
-
 int handling_error(char *path, char *current)
 {
     if (chdir(path) != 0) {
@@ -30,7 +19,7 @@ int handling_error(char *path, char *current)
             my_printf("%s: No such file or directory.\n", path);
             return 1;
         }
-        if (errno == EACCES) {
+        if (access(path, X_OK) != 0) {
             my_printf("%s: Permission denied.\n", path);
             return 1;
         }
@@ -88,7 +77,6 @@ int my_cd(char *buffer, char **env)
             return 0;
         }
     }
-    verify_buffer(path, &current);
     cleaning_buffer(path);
     return change_directory(path, current, &prev);
 }

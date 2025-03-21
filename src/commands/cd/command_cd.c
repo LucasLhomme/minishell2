@@ -44,8 +44,9 @@ int change_directory(char *path, char *current, char **prev)
         *prev = current;
         return 0;
     }
-    if (handling_error(path, current) != 0)
-        return handling_error(path, current);
+    if (handling_error(path, current) != 0) {
+        return 1;
+    }
     if (*prev)
         free(*prev);
     *prev = current;
@@ -58,18 +59,18 @@ static char *find_env(char *path, char **env)
         if (my_strncmp(env[i], "HOME=", 5) == 0) {
             path = env[i] + 5;
             break;
-            }
         }
-        return path;
+    }
+    return path;
 }
 
 int my_cd(char *buffer, char **env)
 {
     static char *prev = NULL;
-    char *path = strtok(buffer, " ");
+    char *path = my_strtok(buffer, " ");
     char *current = getcwd(NULL, 0);
 
-    path = strtok(NULL, " ");
+    path = my_strtok(NULL, " ");
     if (!path || my_strcmp(path, "") == 0 || my_strncmp(path, "~", 1) == 0) {
         path = find_env(path, env);
         if (!path) {
@@ -77,6 +78,6 @@ int my_cd(char *buffer, char **env)
             return 0;
         }
     }
-    cleaning_buffer(path);
+    trim_whitespace(path);
     return change_directory(path, current, &prev);
 }

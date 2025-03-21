@@ -7,26 +7,20 @@
 #include "my.h"
 #include "lib.h"
 
-int *verify_input(char *buffer, int exit_status)
-{
-    (void)exit_status;
-    if (my_strcmp(buffer, "|") == 0)
-        printf("pipe detected\n");
-    return 0;
-}
 
-int process_input(char *buffer, char **env, int *exit_status)
+int process_input(char *buffer, char **env)
 {
-    verify_input(buffer, *exit_status);
+    int exit_status = 0;
+
     if (my_strcmp(buffer, " ") == 0 || my_strcmp(buffer, "\t") == 0 || !buffer)
         return 0;
     if (my_strncmp(buffer, "exit", 4) == 0)
         return 1;
     if (my_strcmp(buffer, "\n") != 0) {
         cleaning_buffer(buffer);
-        *exit_status = hand_command(buffer, env);
+        exit_status = hand_buffer(buffer, env);
     }
-    return 0;
+    return exit_status;
 }
 
 int loop_terminal(char **env)
@@ -44,8 +38,11 @@ int loop_terminal(char **env)
             my_printf("exit\n");
             break;
         }
-        if (process_input(buffer, env, &exit_status) == 1)
+        cleaning_buffer(buffer);
+        if (my_strcmp(buffer, "exit") == 0)
             break;
+        if (my_strcmp(buffer, "\n") != 0)
+            exit_status = process_input(buffer, env);
     }
     return exit_status;
 }
@@ -67,7 +64,7 @@ int loop_tty(char **env)
         if (my_strcmp(buffer, "exit") == 0)
             break;
         if (my_strcmp(buffer, "\n") != 0)
-            exit_status = hand_command(buffer, env);
+            exit_status = process_input(buffer, env);
         if (exit_status != 0)
             return exit_status;
     }

@@ -57,4 +57,9 @@ int my_isalpha(char c);
 int my_isnum(char c);
 char *my_uppercase(char *str);
 int nonalphanum(char c);
+char **my_str_to_word_array_advanced(char *str, char *extra_chars);
+char *my_strtok(char *str, const char *delim);
+char *my_strchr(const char *str, char c);
+char *trim_whitespace(char *str);
+int my_isspace(char c);
 #endif /*lib.h*/

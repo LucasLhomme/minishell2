@@ -33,6 +33,7 @@ LIB =	./check_strisnum.c\
 	./my_revstr.c\
 	./my_str_str.c\
 	./my_str_to_word_array.c\
+	./my_str_to_word_array_advanced.c\
 	./isalphanum.c\
 	./blanck.c\
 	./flag_c.c\
@@ -50,6 +51,9 @@ LIB =	./check_strisnum.c\
 	./my_isalpha.c\
 	./nonalphanumeric.c\
 	./my_isnum.c\
+	./my_strchr.c\
+	./my_strtok.c\
+	./my_trimspace.c\
 
 
 OBJ_LIB  	=	 $(LIB:.c=.o)

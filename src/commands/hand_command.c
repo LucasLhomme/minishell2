@@ -17,17 +17,10 @@ const handle_command_t commands[] = {
 
 int hand_command(char *buffer, char **env)
 {
-    int i = 0;
-
-    cleaning_buffer(buffer);
     for (int i = 0; commands[i].command != NULL; i++) {
         if (my_strncmp(buffer, commands[i].command,
             my_strlen(commands[i].command)) == 0)
             return commands[i].func(buffer, env);
     }
-    while (buffer[i] == ' ' || buffer[i] == '\t')
-        i++;
-    if (buffer[i] != '\0')
-        return searching_bin(buffer, env);
-    return 0;
+    return searching_bin(buffer, env);
 }

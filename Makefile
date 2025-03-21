@@ -18,9 +18,11 @@ NC=\033[0m # No Color
 NAME = mysh
 CFLAGS = -Wall -Wextra -W -Iinclude -Ilib/include -fdiagnostics-color=always
 SRC =	./src/main.c\
+		./src/commands/pipe.c\
 		./src/shell/shell.c\
 		./src/commands/execute_command.c\
 		./src/commands/hand_command.c\
+		./src/commands/hand_buffer.c\
 		./src/commands/searching_bin.c\
 		./src/commands/cd/command_cd.c\
 		./src/commands/env/command_env.c\

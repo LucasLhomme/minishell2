@@ -17,17 +17,14 @@ int isalphanum_with_blanck(char *buffer)
     return 0;
 }
 
-char *cleaning_buffer(char *buffer)
+char *cleaning_buffer(char *str)
 {
-    char *path = buffer;
+    char *end = str + my_strlen(str) - 1;
 
-    if (path == NULL)
-        return NULL;
-    for (int i = 0; path[i] != '\0'; i++) {
-        if (path[i] == '\n')
-            path[i] = '\0';
-    }
-    return path;
+    for (; *str == ' ' || *str == '\t'; str++);
+    for (; end > str && (*end == ' ' || *end == '\t'); end--)
+        *end = '\0';
+    return str;
 }
 
 int execute_bin(char *path, char **argv, char **env)

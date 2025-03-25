@@ -14,8 +14,6 @@ int process_input(char *buffer, char **env)
 
     if (my_strcmp(buffer, " ") == 0 || my_strcmp(buffer, "\t") == 0 || !buffer)
         return 0;
-    if (my_strncmp(buffer, "exit", 4) == 0)
-        return 1;
     if (my_strcmp(buffer, "\n") != 0) {
         cleaning_buffer(buffer);
         exit_status = hand_buffer(buffer, env);
@@ -38,7 +36,7 @@ int loop_terminal(char **env)
             my_printf("exit\n");
             break;
         }
-        cleaning_buffer(buffer);
+        trim_whitespace(buffer);
         if (my_strcmp(buffer, "exit") == 0)
             break;
         if (my_strcmp(buffer, "\n") != 0)
@@ -61,7 +59,7 @@ int loop_tty(char **env)
             my_printf("exit\n");
             break;
         }
-        if (my_strcmp(buffer, "exit") == 0)
+        if (my_strncmp(buffer, "exit", 4) == 0)
             break;
         if (my_strcmp(buffer, "\n") != 0)
             exit_status = process_input(buffer, env);

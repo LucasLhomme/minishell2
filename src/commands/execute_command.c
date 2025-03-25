@@ -31,10 +31,8 @@ int execute_bin(char *path, char **argv, char **env)
 {
     int status = 0;
 
-    if (fork() == 0) {
-        execve(path, argv, env);
-        exit(1);
-    }
+    if (fork() == 0)
+        status = execve(path, argv, env);
     wait(&status);
     free(path);
     for (int i = 0; argv[i] != NULL; i++)

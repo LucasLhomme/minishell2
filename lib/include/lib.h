@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 
 #ifndef LIB_H
@@ -62,4 +63,5 @@ char *my_strtok(char *str, const char *delim);
 char *my_strchr(const char *str, char c);
 char *trim_whitespace(char *str);
 int my_isspace(char c);
+
 #endif /*lib.h*/

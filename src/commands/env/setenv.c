@@ -9,7 +9,7 @@
 
 int over_value_env(char *name, char *value, char **env)
 {
-    char *new_value = malloc(my_strlen(name) + my_strlen(value) + 2);
+    char *new_value = malloc(my_strlen(name) + my_strlen(value) + 3);
     int i = 0;
 
     if (new_value == NULL)
@@ -29,7 +29,7 @@ int over_value_env(char *name, char *value, char **env)
 
 int new_value_env(char *name, char **env)
 {
-    char *new_value = malloc(my_strlen(name) + 1);
+    char *new_value = malloc(my_strlen(name) + 2);
     int i = 0;
 
     if (!name)

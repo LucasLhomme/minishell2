@@ -5,8 +5,8 @@
 ** my_trimspace
 */
 #include <string.h>
-#include "lib.h"
 #include <ctype.h>
+#include "lib.h"
 
 int my_isspace(char c)
 {
@@ -18,6 +18,8 @@ char *trim_whitespace(char *str)
 {
     char *end;
 
+    if (!str)
+        return NULL;
     while (my_isspace(*str))
         str++;
     if (*str == 0)

@@ -32,6 +32,8 @@ static int count_env_vars(char **env)
 {
     int count = 0;
 
+    if (env == NULL)
+        return 0;
     while (env[count] != NULL)
         count++;
     return count;
@@ -44,22 +46,24 @@ static void copy_env_vars(char **env, char **new_env, char *name, int *j)
         env[i][my_strlen(name)] != '=') {
             new_env[*j] = env[i];
             (*j)++;
-        }
+        } else
+            free(env[i]);
     }
+    new_env[*j] = NULL;
 }
 
 int my_unsetenv(char *name, char **env)
 {
     int j = 0;
-    char **new_env = NULL;
     int env_len = count_env_vars(env);
+    char **new_env = NULL;
 
-    return check_name(name);
-    new_env = malloc(sizeof(char *) * env_len);
+    if (check_name(name))
+        return 1;
+    new_env = malloc(sizeof(char *) * (env_len + 1));
     if (new_env == NULL)
         return 1;
     copy_env_vars(env, new_env, name, &j);
-    new_env[j] = NULL;
     for (int i = 0; i < j; i++)
         env[i] = new_env[i];
     env[j] = NULL;

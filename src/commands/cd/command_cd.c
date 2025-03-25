@@ -71,6 +71,11 @@ int my_cd(char *buffer, char **env)
     char *current = getcwd(NULL, 0);
 
     path = my_strtok(NULL, " ");
+    if (my_strtok(NULL, " ") != NULL) {
+        my_printf("cd: Too many arguments.\n");
+        free(current);
+        return 1;
+    }
     if (!path || my_strcmp(path, "") == 0 || my_strncmp(path, "~", 1) == 0) {
         path = find_env(path, env);
         if (!path) {

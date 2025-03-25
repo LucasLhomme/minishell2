@@ -19,6 +19,11 @@ int hand_buffer(char *buffer, char **env)
         if (exit_status != 0)
             return exit_status;
     }
+    if (my_strchr(buffer, ';') != NULL) {
+        exit_status = simple_semicolon(buffer, env);
+        if (exit_status != 0)
+            return exit_status;
+    }
     if (buffer[0] != '\0') {
         exit_status = hand_command(buffer, env);
         if (exit_status != 0)

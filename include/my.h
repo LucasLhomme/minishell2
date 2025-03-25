@@ -40,4 +40,5 @@ int execute_bin(char *path, char **argv, char **env);
 int hand_buffer(char *buffer, char **env);
 int simple_pipe(char *buffer, char **env);
 char *concas_command(char **argv);
+int simple_semicolon(char *buffer, char **env);
 #endif /* MY_H_ */

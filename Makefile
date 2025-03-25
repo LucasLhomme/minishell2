@@ -19,6 +19,7 @@ NAME = mysh
 CFLAGS = -Wall -Wextra -W -Iinclude -Ilib/include -fdiagnostics-color=always
 SRC =	./src/main.c\
 		./src/commands/pipe.c\
+		./src/commands/semicolon.c\
 		./src/shell/shell.c\
 		./src/commands/execute_command.c\
 		./src/commands/hand_command.c\

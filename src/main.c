@@ -16,11 +16,23 @@ int handle_child_process(char **env)
         return loop_tty(env);
 }
 
+void print_signal_message(int status)
+{
+    char *signal_message = strsignal(WTERMSIG(status));
+
+    if (signal_message != NULL)
+        write(STDERR_FILENO, signal_message, my_strlen(signal_message));
+    else
+        write(STDERR_FILENO, "Unknown signal", 14);
+    if (WCOREDUMP(status))
+        write(STDERR_FILENO, " (core dumped)", 14);
+    write(STDERR_FILENO, "\n", 1);
+}
+
 int handle_parent_process(pid_t id)
 {
     int status = 0;
     int exit_status = 0;
-    char *signal_message = strsignal(WTERMSIG(status));
 
     if (waitpid(id, &status, 0) == -1) {
         perror("waitpid failed");
@@ -29,10 +41,7 @@ int handle_parent_process(pid_t id)
     if (WIFEXITED(status))
         exit_status = WEXITSTATUS(status);
     if (WIFSIGNALED(status)) {
-        write(STDERR_FILENO, signal_message, my_strlen(signal_message));
-        if (WCOREDUMP(status))
-            write(STDERR_FILENO, " (core dumped)", 14);
-        write(STDERR_FILENO, "\n", 1);
+        print_signal_message(status);
         exit_status = 128 + WTERMSIG(status);
         return exit_status;
     }

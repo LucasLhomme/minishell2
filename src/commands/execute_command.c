@@ -17,16 +17,6 @@ int isalphanum_with_blanck(char *buffer)
     return 0;
 }
 
-char *cleaning_buffer(char *str)
-{
-    char *end = str + my_strlen(str) - 1;
-
-    for (; *str == ' ' || *str == '\t'; str++);
-    for (; end > str && (*end == ' ' || *end == '\t'); end--)
-        *end = '\0';
-    return str;
-}
-
 int execute_bin(char *path, char **argv, char **env)
 {
     int status = 0;

@@ -180,3 +180,4 @@ fi
 echo "Résumé des tests :"
 echo "Tests réussis ✅: $test_passed"
 echo "Tests échoués ❌: $test_failed"
+echo "Total tests 🦀: $((test_passed + test_failed))"

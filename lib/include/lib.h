@@ -50,6 +50,7 @@ void flag_percent(va_list list);
 void flag_x2(va_list list);
 void flag_x(va_list list);
 void blank(va_list list);
+int my_isalpha(char c);
 int my_strcmp(char const *s1, char const *s2);
 int flag_detector(const char *format, int i, va_list list);
 int isalphanum(char c);

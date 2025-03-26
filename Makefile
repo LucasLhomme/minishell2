@@ -18,17 +18,22 @@ NC=\033[0m # No Color
 NAME = mysh
 CFLAGS = -Wall -Wextra -W -Iinclude -Ilib/include -fdiagnostics-color=always
 SRC =	./src/main.c\
-		./src/commands/pipe.c\
-		./src/commands/semicolon.c\
+		./src/shell/redirect/pipe.c\
+		./src/shell/redirect/simple_pipe.c\
+		./src/shell/redirect/semicolon.c\
+		./src/shell/redirect/redirect.c\
+		./src/shell/hand_buffer.c\
 		./src/shell/shell.c\
-		./src/commands/execute_command.c\
 		./src/commands/hand_command.c\
-		./src/commands/hand_buffer.c\
+		./src/commands/execute_command.c\
 		./src/commands/searching_bin.c\
 		./src/commands/cd/command_cd.c\
 		./src/commands/env/command_env.c\
 		./src/commands/env/setenv.c\
 		./src/commands/env/unsetenv.c\
+		./src/utils/cleaning_argv.c\
+		./src/utils/cleaning_buffer.c\
+		./src/utils/concas_command.c\
 
 OBJ = $(SRC:.c=.o)
 LIBMY = libmy.a

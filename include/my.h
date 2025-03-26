@@ -22,6 +22,28 @@ typedef struct handle_command_s {
     command_func_t func;
 } handle_command_t;
 
+typedef struct handle_redirect_s {
+    char *command;
+    command_func_t func;
+} handle_redirect_t;
+
+typedef struct context_s {
+    char *path;
+    char **argv;
+    char **env;
+    int in_fd;
+    int out_fd;
+} executioncontext_t;
+
+typedef struct pipe_context_s {
+    int pipefd[2];
+    pid_t pid1;
+    pid_t pid2;
+    char *command1;
+    char *command2;
+    char **env;
+} pipe_context_t;
+
 #ifndef MY_H_
     #define MY_H_
 char *cleaning_buffer(char *buffer);
@@ -35,10 +57,13 @@ int my_setenv(char *buffer, char **env);
 int new_value_env(char *name, char **env);
 int over_value_env(char *name, char *value, char **env);
 int my_unsetenv(char *name, char **env);
-int my_isalpha(char c);
 int execute_bin(char *path, char **argv, char **env);
 int hand_buffer(char *buffer, char **env);
 int simple_pipe(char *buffer, char **env);
 char *concas_command(char **argv);
+int pipe_command_setup(char *command1, char *command2, char **env);
 int simple_semicolon(char *buffer, char **env);
+int redirect(char *buffer, char **env);
+void cleanup_argv(char **argv);
+
 #endif /* MY_H_ */

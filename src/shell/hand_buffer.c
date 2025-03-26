@@ -14,6 +14,7 @@ const handle_redirect_t redirect_table[] = {
     {"|", simple_pipe},
     {";", simple_semicolon},
     {">", redirect},
+    {"<", redirect},
     {NULL, NULL}
 };
 

@@ -93,16 +93,16 @@ load_test()
   then
     if [ $debug -ge 1 ]
     then
-      echo "Test $id ($NAME) : ✅"
+      # echo "Test $id ($NAME) : ✅"
       test_passed=$((test_passed + 1))
       if [ $debug -eq 2 ]
       then
-        echo "Output $MYSHELL :"
-        $CAT -e /tmp/.shell.$$
-        echo "" 
-        echo "Output $REFER :"
-        $CAT -e /tmp/.refer.$$
-        echo ""
+      echo "Output $MYSHELL :"
+      $CAT -e /tmp/.shell.$$
+      echo "" 
+      echo "Output $REFER :"
+      $CAT -e /tmp/.refer.$$
+      echo ""
       fi
     else
       echo "✅"

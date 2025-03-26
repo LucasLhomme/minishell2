@@ -75,7 +75,7 @@ TESTS=
   echo "cat coucou"
 [808-END]
 
-[808]
+[834]
 NAME="Test multiple redirection | Minishell 2"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
@@ -85,7 +85,7 @@ TESTS=
   echo "ls -l >> coucou"
   echo "cat coucou"
   echo "cat < coucou"
-[808-END]
+[834-END]
 
 [809]
 NAME="Void redirection | Minishell 2"

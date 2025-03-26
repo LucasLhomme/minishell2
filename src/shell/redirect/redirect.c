@@ -24,7 +24,8 @@ static int handle_redirect_error(char *command, char *file, int fd)
     return 0;
 }
 
-static int execute_command_with_redirect(char *command, char **env, int fd)
+static int execute_command_with_redirect(char *command, char **env, int fd,
+    int std_fd)
 {
     pid_t pid = fork();
 
@@ -34,7 +35,7 @@ static int execute_command_with_redirect(char *command, char **env, int fd)
         return 1;
     }
     if (pid == 0) {
-        dup2(fd, STDOUT_FILENO);
+        dup2(fd, std_fd);
         close(fd);
         if (hand_command(command, env) == -1) {
             my_printf("%s: Command not found.\n", command);
@@ -48,18 +49,61 @@ static int execute_command_with_redirect(char *command, char **env, int fd)
     return 0;
 }
 
-int redirect(char *buffer, char **env)
+static int handle_output_redirect(char *command, char *file, char **env,
+    int append)
 {
-    char *command = my_strtok(buffer, ">");
-    char *file = my_strtok(NULL, ">");
     int fd;
 
-    if (file != NULL)
-        file = trim_whitespace(file);
-    if (command != NULL)
-        command = trim_whitespace(command);
-    fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (append)
+        fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+    else
+        fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (handle_redirect_error(command, file, fd))
         return 1;
-    return execute_command_with_redirect(command, env, fd);
+    return execute_command_with_redirect(command, env, fd, STDOUT_FILENO);
+}
+
+static int handle_input_redirect(char *command, char *file, char **env)
+{
+    int fd = open(file, O_RDONLY);
+
+    if (handle_redirect_error(command, file, fd))
+        return 1;
+    return execute_command_with_redirect(command, env, fd, STDIN_FILENO);
+}
+
+static int handle_double_output_redirect(char *buffer, char **env)
+{
+    char *command = trim_whitespace(my_strtok(buffer, ">>"));
+    char *file = trim_whitespace(my_strtok(NULL, ">>"));
+
+    return handle_output_redirect(command, file, env, 1);
+}
+
+static int handle_single_output_redirect(char *buffer, char **env)
+{
+    char *command = trim_whitespace(my_strtok(buffer, ">"));
+    char *file = trim_whitespace(my_strtok(NULL, ">"));
+
+    return handle_output_redirect(command, file, env, 0);
+}
+
+static int handle_single_input_redirect(char *buffer, char **env)
+{
+    char *command = trim_whitespace(my_strtok(buffer, "<"));
+    char *file = trim_whitespace(my_strtok(NULL, "<"));
+
+    return handle_input_redirect(command, file, env);
+}
+
+int redirect(char *buffer, char **env)
+{
+    if (my_strstr(buffer, ">>"))
+        return handle_double_output_redirect(buffer, env);
+    if (my_strstr(buffer, ">"))
+        return handle_single_output_redirect(buffer, env);
+    if (my_strstr(buffer, "<"))
+        return handle_single_input_redirect(buffer, env);
+    my_printf("Invalid redirection type.\n");
+    return 1;
 }

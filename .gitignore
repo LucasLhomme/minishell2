@@ -1,4 +1,5 @@
 lib(new)
+.idea
 # Prerequisites
 *.d
 mysh

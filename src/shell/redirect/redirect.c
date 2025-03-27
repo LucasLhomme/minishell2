@@ -11,14 +11,14 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-static int handle_redirect_error(char *command, char *file, int fd)
+static int handle_redirect_error(char *command, char *file)
 {
-    if (file == NULL || command == NULL) {
-        my_printf("Missing name for redirect.\n");
+    if (command == NULL || command[0] == '\0') {
+        my_printf("Invalid null command.\n");
         return 1;
     }
-    if (fd == -1) {
-        perror("open");
+    if (file == NULL || file[0] == '\0') {
+        my_printf("Missing name for redirect.\n");
         return 1;
     }
     return 0;
@@ -58,18 +58,28 @@ static int handle_output_redirect(char *command, char *file, char **env,
         fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
     else
         fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (handle_redirect_error(command, file, fd))
+    if (handle_redirect_error(command, file))
         return 1;
     return execute_command_with_redirect(command, env, fd, STDOUT_FILENO);
 }
 
 static int handle_input_redirect(char *command, char *file, char **env)
 {
-    int fd = open(file, O_RDONLY);
-
-    if (handle_redirect_error(command, file, fd))
+    // First, check for invalid command or file
+    if (handle_redirect_error(command, file))
         return 1;
-    return execute_command_with_redirect(command, env, fd, STDIN_FILENO);
+
+    // Open the file for reading
+    int fd = open(file, O_RDONLY);
+    if (fd == -1) {
+        // If file doesn't exist, exit with an error status
+        my_printf("%s: No such file or directory\n", file);
+        return 1;
+    }
+    // Execute the command with input redirected from the file
+    int result = execute_command_with_redirect(command, env, fd, STDIN_FILENO);
+    
+    return result;
 }
 
 static int handle_double_output_redirect(char *buffer, char **env)
@@ -104,6 +114,5 @@ int redirect(char *buffer, char **env)
         return handle_single_output_redirect(buffer, env);
     if (my_strstr(buffer, "<"))
         return handle_single_input_redirect(buffer, env);
-    my_printf("Invalid redirection type.\n");
     return 1;
 }

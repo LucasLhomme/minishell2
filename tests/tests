@@ -791,6 +791,7 @@ NAME="cd vers un fichier sans permission de lecture | Minishell 1"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
+  echo 'touch temp.txt'
   echo 'chmod -rwx temp.txt'
   echo 'cd temp.txt'
   echo 'ls'

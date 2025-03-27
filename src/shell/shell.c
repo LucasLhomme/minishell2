@@ -56,10 +56,9 @@ int loop_tty(char **env)
         read = getline(&buffer, &len, stdin);
         if (read == -1) {
             free(buffer);
-            my_printf("exit\n");
             break;
         }
-        if (my_strncmp(buffer, "exit", 4) == 0)
+        if (my_strcmp(buffer, "exit") == 0)
             break;
         if (my_strcmp(buffer, "\n") != 0)
             exit_status = process_input(buffer, env);

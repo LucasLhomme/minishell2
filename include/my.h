@@ -64,6 +64,7 @@ char *concas_command(char **argv);
 int pipe_command_setup(char *command1, char *command2, char **env);
 int simple_semicolon(char *buffer, char **env);
 int redirect(char *buffer, char **env);
+int my_execute_program(char *buffer, char **env);
 void cleanup_argv(char **argv);
 
 #endif /* MY_H_ */

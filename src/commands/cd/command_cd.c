@@ -10,22 +10,24 @@
 
 int handling_error(char *path, char *current)
 {
+    int exit_status = 0;
+
     if (chdir(path) != 0) {
         if (errno == ENOTDIR) {
             my_printf("%s: Not a directory.\n", path);
-            return 1;
+            exit_status = 1;
         }
         if (errno == ENOENT) {
             my_printf("%s: No such file or directory.\n", path);
-            return 1;
+            exit_status = 1;
         }
         if (access(path, X_OK) != 0) {
             my_printf("%s: Permission denied.\n", path);
-            return 1;
+            exit_status = 1;
         }
         free(current);
     }
-    return 0;
+    return exit_status;
 }
 
 void prev_cd(char *buffer)

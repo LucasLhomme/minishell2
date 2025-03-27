@@ -6,6 +6,7 @@
 */
 #include "lib.h"
 #include "my.h"
+#include <sys/stat.h>
 
 const handle_command_t commands[] = {
     {"cd", my_cd},
@@ -15,7 +16,19 @@ const handle_command_t commands[] = {
     {NULL, NULL}
 };
 
-int hand_command(char *buffer, char **env)
+int is_folder(char *buffer)
+{
+    struct stat path_stat;
+    int exit_status = 0;
+
+    if (stat(buffer, &path_stat) == 0 && S_ISDIR(path_stat.st_mode)) {
+        my_printf("%s: Permission denied.\n", buffer);
+        exit_status = 1;
+    }
+    return exit_status;
+}
+
+int my_execute_program(char *buffer, char **env)
 {
     for (int i = 0; commands[i].command != NULL; i++) {
         if (my_strncmp(buffer, commands[i].command,
@@ -23,4 +36,16 @@ int hand_command(char *buffer, char **env)
             return commands[i].func(buffer, env);
     }
     return searching_bin(buffer, env);
+}
+
+int hand_command(char *buffer, char **env)
+{
+    int exit_status = 0;
+
+    trim_whitespace(buffer);
+    if (is_folder(buffer) == 1)
+        exit_status = 1;
+    else
+        exit_status = my_execute_program(buffer, env);
+    return exit_status;
 }

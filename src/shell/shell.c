@@ -40,7 +40,7 @@ int loop_terminal(char **env)
         if (my_strcmp(buffer, "exit") == 0)
             break;
         if (my_strcmp(buffer, "\n") != 0)
-            exit_status = process_input(buffer, env);
+        exit_status = process_input(buffer, env);
     }
     return exit_status;
 }
@@ -61,7 +61,7 @@ int loop_tty(char **env)
         if (my_strcmp(buffer, "exit") == 0)
             break;
         if (my_strcmp(buffer, "\n") != 0)
-            exit_status = process_input(buffer, env);
+        exit_status = process_input(buffer, env);
         if (exit_status != 0)
             return exit_status;
     }

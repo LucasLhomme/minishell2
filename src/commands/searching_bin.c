@@ -8,7 +8,12 @@
 #include "my.h"
 #include <sys/stat.h>
 
-static char *find_env(char *path, char **env)
+static int is_valid_home_path(char *path)
+{
+    return path[0] != '\0';
+}
+
+char *find_env(char *path, char **env)
 {
     for (int i = 0; env[i]; i++) {
         if (my_strncmp(env[i], "HOME=", 5) == 0) {
@@ -16,6 +21,8 @@ static char *find_env(char *path, char **env)
             break;
         }
     }
+    if (path != NULL && !is_valid_home_path(path))
+        return NULL;
     return path;
 }
 
@@ -31,13 +38,15 @@ static int handle_command_not_found(char **argv, char *path)
 
 static char *expand_tilde(char *arg, char **env)
 {
-    char *home_path = find_env(NULL, env);
-    char *new_path = malloc(my_strlen(home_path) + my_strlen(arg) + 1);
+    char *home_path;
+    char *new_path;
 
     if (arg[0] != '~')
         return arg;
+    home_path = find_env(NULL, env);
     if (home_path == NULL)
         return arg;
+    new_path = malloc(my_strlen(home_path) + my_strlen(arg) + 1);
     if (new_path == NULL)
         return arg;
     my_strcpy(new_path, home_path);
@@ -95,6 +104,10 @@ int searching_bin(char *buffer, char **env)
     char **argv = my_str_to_word_array(buffer);
     char *path = NULL;
 
+    if (find_env(NULL, env) == NULL) {
+        free_argv(argv);
+        return 1;
+    }
     if (argv != NULL && argv[0] != NULL && my_strncmp(argv[0], "/", 1) == 0)
         return 0;
     if (handle_empty_or_null_argv(buffer, argv))
@@ -102,7 +115,7 @@ int searching_bin(char *buffer, char **env)
     argv[0] = expand_tilde(argv[0], env);
     if (handle_directory_case(argv))
         return 1;
-    path = concas_command(argv);
+    path = concas_command(argv, env);
     if (handle_null_path(argv, path))
         return 1;
     return execute_command(path, argv, env);

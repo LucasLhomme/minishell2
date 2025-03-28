@@ -19,17 +19,9 @@ static char *find_env(char *path, char **env)
     return path;
 }
 
-static void free_argv(char **argv)
-{
-    for (int i = 0; argv[i] != NULL; i++)
-        free(argv[i]);
-    free(argv);
-}
-
 static int handle_command_not_found(char **argv, char *path)
 {
     my_printf("%s: Command not found.\n", argv[0]);
-    
     if (path != NULL)
         free(path);
     free_argv(argv);
@@ -60,19 +52,20 @@ static int execute_command(char *path, char **argv, char **env)
     return handle_command_not_found(argv, path);
 }
 
-int searching_bin(char *buffer, char **env)
+static int handle_empty_or_null_argv(char *buffer, char **argv)
 {
-    char **argv = my_str_to_word_array(buffer);
-    char *path;
-    struct stat st;
-    
     if (argv == NULL || argv[0] == NULL) {
         if (argv != NULL)
             free_argv(argv);
         my_printf("%s: Command not found.\n", buffer);
         return 1;
     }
-    argv[0] = expand_tilde(argv[0], env);
+    return 0;
+}
+
+static int handle_directory_case(char **argv)
+{
+    struct stat st;
 
     if (argv[0] != NULL && argv[0][0] != '\0') {
         if (stat(argv[0], &st) == 0 && S_ISDIR(st.st_mode)) {
@@ -81,11 +74,31 @@ int searching_bin(char *buffer, char **env)
             return 1;
         }
     }
-    path = concas_command(argv);
+    return 0;
+}
+
+static int handle_null_path(char **argv, char *path)
+{
     if (path == NULL) {
         my_printf("%s: Command not found.\n", argv[0]);
         free_argv(argv);
         return 1;
     }
+    return 0;
+}
+
+int searching_bin(char *buffer, char **env)
+{
+    char **argv = my_str_to_word_array(buffer);
+    char *path;
+
+    if (handle_empty_or_null_argv(buffer, argv))
+        return 1;
+    argv[0] = expand_tilde(argv[0], env);
+    if (handle_directory_case(argv))
+        return 1;
+    path = concas_command(argv);
+    if (handle_null_path(argv, path))
+        return 1;
     return execute_command(path, argv, env);
 }

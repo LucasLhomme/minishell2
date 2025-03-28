@@ -60,5 +60,6 @@ int simple_semicolon(char *buffer, char **env);
 int redirect(char *buffer, char **env);
 int my_execute_program(char *buffer, char **env);
 void cleanup_argv(char **argv);
+void free_argv(char **argv);
 
 #endif /* MY_H_ */

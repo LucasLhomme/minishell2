@@ -34,6 +34,7 @@ SRC =	./src/main.c\
 		./src/utils/cleaning_argv.c\
 		./src/utils/cleaning_buffer.c\
 		./src/utils/concas_command.c\
+		./src/utils/free_argv.c\
 
 OBJ = $(SRC:.c=.o)
 LIBMY = libmy.a

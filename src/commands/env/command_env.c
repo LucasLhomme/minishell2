@@ -37,13 +37,6 @@ int check_var(char *name)
     return 0;
 }
 
-static void free_argv(char **argv)
-{
-    for (int i = 0; argv[i] != NULL; i++)
-        free(argv[i]);
-    free(argv);
-}
-
 static int handle_no_arguments(char **env, char **argv)
 {
     print_env(env);
@@ -83,28 +76,31 @@ static int handle_null_value(char *name, char **env)
     return result;
 }
 
-static int handle_name_and_value(char *name, char *value,
-    char **env)
+static int update_env_var(char *name, char *value, char **env, int index)
 {
-    char *new_entry = NULL;
-    int result = 0;
+    char *new_entry = malloc(my_strlen(name) + my_strlen(value) + 2);
+
+    if (new_entry == NULL)
+        return 84;
+    my_strcpy(new_entry, name);
+    my_strcat(new_entry, "=");
+    my_strcat(new_entry, value);
+    free(env[index]);
+    env[index] = new_entry;
+    return 0;
+}
+
+static int handle_name_and_value(char *name, char *value, char **env)
+{
+    int name_len = my_strlen(name);
 
     for (int i = 0; env[i] != NULL; i++) {
-        if (my_strncmp(env[i], name, my_strlen(name)) == 0 &&
-        env[i][my_strlen(name)] == '=') {
-            new_entry = malloc(my_strlen(name) + my_strlen(value) + 2);
-            if (new_entry == NULL)
-                return 84;
-            my_strcpy(new_entry, name);
-            my_strcat(new_entry, "=");
-            my_strcat(new_entry, value);
-            free(env[i]);
-            env[i] = new_entry;
-            return 0;
+        if (my_strncmp(env[i], name, name_len) == 0 &&
+            env[i][name_len] == '=') {
+            return update_env_var(name, value, env, i);
         }
     }
-    result = over_value_env(name, value, env);
-    return result;
+    return over_value_env(name, value, env);
 }
 
 int my_setenv(char *buffer, char **env)

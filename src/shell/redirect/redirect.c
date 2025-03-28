@@ -65,20 +65,15 @@ static int handle_output_redirect(char *command, char *file, char **env,
 
 static int handle_input_redirect(char *command, char *file, char **env)
 {
-    // First, check for invalid command or file
+    int fd = open(file, O_RDONLY);
+    int result = execute_command_with_redirect(command, env, fd, STDIN_FILENO);
+
     if (handle_redirect_error(command, file))
         return 1;
-
-    // Open the file for reading
-    int fd = open(file, O_RDONLY);
     if (fd == -1) {
-        // If file doesn't exist, exit with an error status
         my_printf("%s: No such file or directory\n", file);
         return 1;
     }
-    // Execute the command with input redirected from the file
-    int result = execute_command_with_redirect(command, env, fd, STDIN_FILENO);
-    
     return result;
 }
 

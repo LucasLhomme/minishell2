@@ -21,9 +21,10 @@ static char *find_env(char *path, char **env)
 
 static int handle_command_not_found(char **argv, char *path)
 {
-    my_printf("%s: Command not found.\n", argv[0]);
     if (path != NULL)
         free(path);
+    if (argv != NULL && argv[0] != NULL)
+        my_printf("%s: Command not found.\n", argv[0]);
     free_argv(argv);
     return 1;
 }
@@ -55,8 +56,10 @@ static int execute_command(char *path, char **argv, char **env)
 static int handle_empty_or_null_argv(char *buffer, char **argv)
 {
     if (argv == NULL || argv[0] == NULL) {
-        if (argv != NULL)
+        if (argv != NULL) {
             free_argv(argv);
+            return 1;
+        }
         my_printf("%s: Command not found.\n", buffer);
         return 1;
     }
@@ -90,8 +93,10 @@ static int handle_null_path(char **argv, char *path)
 int searching_bin(char *buffer, char **env)
 {
     char **argv = my_str_to_word_array(buffer);
-    char *path;
+    char *path = NULL;
 
+    if (argv != NULL && argv[0] != NULL && my_strncmp(argv[0], "/", 1) == 0)
+        return 0;
     if (handle_empty_or_null_argv(buffer, argv))
         return 1;
     argv[0] = expand_tilde(argv[0], env);

@@ -16,7 +16,7 @@ const handle_command_t commands[] = {
     {NULL, NULL}
 };
 
-int is_folder(char *buffer)
+static int is_folder(char *buffer)
 {
     struct stat path_stat;
     int exit_status = 0;
@@ -38,15 +38,39 @@ int my_execute_program(char *buffer, char **env)
     return searching_bin(buffer, env);
 }
 
+int execute_child_process(char **args, char **env)
+{
+    if (execve(args[0], args, env) == -1) {
+        free_argv(args);
+        exit(1);
+    }
+    return 0;
+}
+
+int handle_fork(char **args, char **env)
+{
+    int status;
+    pid_t pid = fork();
+
+    if (pid == 0) {
+        execute_child_process(args, env);
+    } else if (pid > 0) {
+        waitpid(pid, &status, 0);
+        return WIFEXITED(status) ? WEXITSTATUS(status) : 1;
+    } else
+        return 1;
+    return 0;
+}
+
 int is_program(char *buffer, char **env)
 {
     char **args = my_str_to_word_array(buffer);
+    int result = 0;
 
-    if (my_strncmp(buffer, "./", 2) == 0) {
-        if (execve(args[0], args, env) == -1)
-            return 1;
-    }
-    return 0;
+    if (my_strncmp(buffer, "./", 2) == 0 || (my_strncmp(buffer, "/", 1) == 0))
+        result = handle_fork(args, env);
+    free_argv(args);
+    return result;
 }
 
 int hand_command(char *buffer, char **env)

@@ -75,7 +75,6 @@ static int handle_null_value(char *name, char **env)
             new_entry = malloc(my_strlen(name) + 2);
             my_strcpy(new_entry, name);
             my_strcat(new_entry, "=");
-            free(env[i]);
             env[i] = new_entry;
             return 0;
         }

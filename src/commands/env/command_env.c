@@ -64,20 +64,45 @@ static int handle_invalid_variable_name(int exit_check_var, char **argv)
     return exit_check_var;
 }
 
-static int handle_null_value(char *name, char **env, char **argv)
+static int handle_null_value(char *name, char **env)
 {
-    int result = new_value_env(name, env);
+    char *new_entry = NULL;
+    int result = 0;
 
-    free_argv(argv);
+    for (int i = 0; env[i] != NULL; i++) {
+        if (my_strncmp(env[i], name, my_strlen(name)) == 0 &&
+        env[i][my_strlen(name)] == '=') {
+            new_entry = malloc(my_strlen(name) + 2);
+            my_strcpy(new_entry, name);
+            my_strcat(new_entry, "=");
+            free(env[i]);
+            env[i] = new_entry;
+            return 0;
+        }
+    }
+    result = new_value_env(name, env);
     return result;
 }
 
 static int handle_name_and_value(char *name, char *value,
-    char **env, char **argv)
+    char **env)
 {
-    int result = over_value_env(name, value, env);
+    char *new_entry = NULL;
+    int result = 0;
 
-    free_argv(argv);
+    for (int i = 0; env[i] != NULL; i++) {
+        if (my_strncmp(env[i], name, my_strlen(name)) == 0 &&
+        env[i][my_strlen(name)] == '=') {
+            new_entry = malloc(my_strlen(name) + my_strlen(value) + 2);
+            my_strcpy(new_entry, name);
+            my_strcat(new_entry, "=");
+            my_strcat(new_entry, value);
+            free(env[i]);
+            env[i] = new_entry;
+            return 0;
+        }
+    }
+    result = over_value_env(name, value, env);
     return result;
 }
 
@@ -95,9 +120,9 @@ int my_setenv(char *buffer, char **env)
     if (exit_check_var != 0)
         return handle_invalid_variable_name(exit_check_var, argv);
     if (value == NULL)
-        return handle_null_value(name, env, argv);
+        return handle_null_value(name, env);
     if (name != NULL || value != NULL)
-        return handle_name_and_value(name, value, env, argv);
+        return handle_name_and_value(name, value, env);
     free_argv(argv);
     return 0;
 }

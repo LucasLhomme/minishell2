@@ -93,6 +93,8 @@ static int handle_name_and_value(char *name, char *value,
         if (my_strncmp(env[i], name, my_strlen(name)) == 0 &&
         env[i][my_strlen(name)] == '=') {
             new_entry = malloc(my_strlen(name) + my_strlen(value) + 2);
+            if (new_entry == NULL)
+                return 84;
             my_strcpy(new_entry, name);
             my_strcat(new_entry, "=");
             my_strcat(new_entry, value);

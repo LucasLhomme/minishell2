@@ -67,10 +67,7 @@ int handle_invalid_variable_name(int exit_check_var, char **argv);
 int handle_too_many_arguments(char **argv);
 int handle_no_arguments(char **env, char **argv);
 int print_env(char **env);
-int pipe_command_setup(char *command1, char *command2, char **env);
 int find_and_execute_command(char *buffer, char **env, int in_fd, int out_fd);
 int is_null_command(char *command1, char *command2);
-int pipe_command_setup(char *command1, char *command2, char **env);
-
 
 #endif /* MY_H_ */

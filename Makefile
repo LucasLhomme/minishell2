@@ -22,6 +22,7 @@ SRC =	./src/main.c\
 		./src/shell/redirect/simple_pipe.c\
 		./src/shell/redirect/semicolon.c\
 		./src/shell/redirect/redirect.c\
+		./src/shell/redirect/pipe_helpers.c\
 		./src/shell/hand_buffer.c\
 		./src/shell/shell.c\
 		./src/commands/hand_command.c\
@@ -29,6 +30,8 @@ SRC =	./src/main.c\
 		./src/commands/searching_bin.c\
 		./src/commands/cd/command_cd.c\
 		./src/commands/env/command_env.c\
+		./src/commands/env/my_env.c\
+		./src/commands/env/handle_env.c\
 		./src/commands/env/setenv.c\
 		./src/commands/env/unsetenv.c\
 		./src/utils/cleaning_argv.c\

@@ -6,26 +6,86 @@
 */
 #include "lib.h"
 #include "my.h"
+#include <sys/stat.h>
+
+static char *find_env(char *path, char **env)
+{
+    for (int i = 0; env[i]; i++) {
+        if (my_strncmp(env[i], "HOME=", 5) == 0) {
+            path = env[i] + 5;
+            break;
+        }
+    }
+    return path;
+}
+
+static void free_argv(char **argv)
+{
+    for (int i = 0; argv[i] != NULL; i++)
+        free(argv[i]);
+    free(argv);
+}
+
+static int handle_command_not_found(char **argv, char *path)
+{
+    my_printf("%s: Command not found.\n", argv[0]);
+    
+    if (path != NULL)
+        free(path);
+    free_argv(argv);
+    return 1;
+}
+
+static char *expand_tilde(char *arg, char **env)
+{
+    char *home_path = find_env(NULL, env);
+    char *new_path = malloc(my_strlen(home_path) + my_strlen(arg) + 1);
+
+    if (arg[0] != '~')
+        return arg;
+    if (home_path == NULL)
+        return arg;
+    if (new_path == NULL)
+        return arg;
+    my_strcpy(new_path, home_path);
+    my_strcat(new_path, arg + 1);
+    free(arg);
+    return new_path;
+}
+
+static int execute_command(char *path, char **argv, char **env)
+{
+    if (access(path, X_OK) == 0)
+        return execute_bin(path, argv, env);
+    return handle_command_not_found(argv, path);
+}
 
 int searching_bin(char *buffer, char **env)
 {
-    char **argv = NULL;
-    char *path = NULL;
-
-    argv = my_str_to_word_array(buffer);
+    char **argv = my_str_to_word_array(buffer);
+    char *path;
+    struct stat st;
+    
     if (argv == NULL || argv[0] == NULL) {
+        if (argv != NULL)
+            free_argv(argv);
         my_printf("%s: Command not found.\n", buffer);
         return 1;
     }
+    argv[0] = expand_tilde(argv[0], env);
+
+    if (argv[0] != NULL && argv[0][0] != '\0') {
+        if (stat(argv[0], &st) == 0 && S_ISDIR(st.st_mode)) {
+            my_printf("%s: Is a directory.\n", argv[0]);
+            free_argv(argv);
+            return 1;
+        }
+    }
     path = concas_command(argv);
-    if (access(path, X_OK) == 0)
-        return execute_bin(path, argv, env);
-    else {
+    if (path == NULL) {
         my_printf("%s: Command not found.\n", argv[0]);
-        free(path);
-        for (int i = 0; argv[i] != NULL; i++)
-            free(argv[i]);
-        free(argv);
+        free_argv(argv);
         return 1;
     }
+    return execute_command(path, argv, env);
 }

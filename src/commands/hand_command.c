@@ -38,11 +38,24 @@ int my_execute_program(char *buffer, char **env)
     return searching_bin(buffer, env);
 }
 
+int is_program(char *buffer, char **env)
+{
+    char **args = my_str_to_word_array(buffer);
+
+    if (my_strncmp(buffer, "./", 2) == 0) {
+        if (execve(args[0], args, env) == -1)
+            return 1;
+    }
+    return 0;
+}
+
 int hand_command(char *buffer, char **env)
 {
     int exit_status = 0;
 
     trim_whitespace(buffer);
+    if (is_program(buffer, env) == 0)
+        exit_status = 1;
     if (is_folder(buffer) == 1)
         exit_status = 1;
     else

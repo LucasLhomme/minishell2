@@ -9,12 +9,6 @@
 #include <sys/wait.h>
 #include <stdarg.h>
 
-typedef struct hand_buffer_s {
-    char *buffer;
-    struct hand_buffer_s *next;
-    struct hand_buffer_s *prev;
-} hand_buffer_t;
-
 typedef int (*command_func_t)(char *, char **);
 
 typedef struct handle_command_s {
